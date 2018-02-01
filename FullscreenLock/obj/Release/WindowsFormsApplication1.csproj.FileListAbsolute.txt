@@ -1,0 +1,8 @@
+c:\users\linn\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Release\WindowsFormsApplication1.Form1.resources
+c:\users\linn\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Release\WindowsFormsApplication1.csproj.GenerateResource.Cache
+c:\users\linn\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Release\FullscreenLock.exe.config
+c:\users\linn\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Release\FullscreenLock.exe
+c:\users\linn\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Release\FullscreenLock.pdb
+c:\users\linn\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Release\FullscreenLock.Properties.Resources.resources
+c:\users\linn\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Release\FullscreenLock.exe
+c:\users\linn\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Release\FullscreenLock.pdb
