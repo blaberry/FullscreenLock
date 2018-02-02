@@ -18,9 +18,9 @@ All this is made possible by watching what window is focused. Any window both fu
 # Demo
 
 Here's a demonstration of mouse movement when:
-A focused window becomes fullscreen
-A fullscreen window loses focus
-A fullscreen window regains focus
-A focused, fullscreen window regains window decorations.
+- A focused window becomes fullscreen
+- Afullscreen window loses focus
+- Afullscreen window regains focus
+- Afocused, fullscreen window regains window decorations.
 
 https://streamable.com/pj91p
