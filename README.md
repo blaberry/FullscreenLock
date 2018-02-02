@@ -1,16 +1,12 @@
 # FullscreenLock
-Like AKADEVILs PrimaryLock, but different.
+Provide fullscreen mouse boundaries for games that don't.
 
-
-## What is this
 This is a program that locks the cursor to the primary monitor for games where the devs were too incompetent to do so themselves.
 
 In certain games, for example GTA V in windowed fullscreen, Skyrim and CS:GO, the mouse will not be locked to the primary monitor.
 This can cause a user to drag the cursor out of the program, click, suddenly minimize the game and have to switch back in.
 
-## Why this program?
-
-I am a main AWPer, and sometimes have to clutch. Flickshots ensue. Many a clutches have been lost to swiping off to the left, followed by the game minimising when I clic.
+## Why make this program?
 
 The original(?) PrimaryLock by AKADEVIL does the job well, but it is a little rudimentary, in that it just locks the cursor as long as PrimaryLock is open. 
 
