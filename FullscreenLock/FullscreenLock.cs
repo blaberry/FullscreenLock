@@ -21,11 +21,6 @@ namespace FullscreenLock
         private void Form1_Load(object sender, EventArgs e)
         {
             this.c = new Checker(label1);
-            LinkLabel.Link link = new LinkLabel.Link();
-            link.LinkData = "https://steamcommunity.com/tradeoffer/new/?partner=40730537&token=Y207zFvl";
-
-            LinkLabel.Link link2 = new LinkLabel.Link();
-            link2.LinkData = "https://steamcommunity.com/id/Rostok";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -37,17 +32,14 @@ namespace FullscreenLock
             this.label1.Text = s;
         }
 
-        private void linkLabel4_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void label1_Click(object sender, EventArgs e)
         {
-            // Send the URL to the operating system.
-            Process.Start(e.Link.LinkData as string);
+
         }
 
-
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void label4_Click(object sender, EventArgs e)
         {
 
-            Process.Start(e.Link.LinkData as string);
         }
     }
 }

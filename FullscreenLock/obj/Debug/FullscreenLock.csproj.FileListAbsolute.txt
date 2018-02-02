@@ -1,0 +1,8 @@
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\bin\Debug\FullscreenLock.exe.config
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\bin\Debug\FullscreenLock.exe
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\bin\Debug\FullscreenLock.pdb
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\obj\Debug\FullscreenLock.FullscreenLock.resources
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\obj\Debug\FullscreenLock.Properties.Resources.resources
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\obj\Debug\FullscreenLock.csproj.GenerateResource.Cache
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\obj\Debug\FullscreenLock.exe
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\obj\Debug\FullscreenLock.pdb

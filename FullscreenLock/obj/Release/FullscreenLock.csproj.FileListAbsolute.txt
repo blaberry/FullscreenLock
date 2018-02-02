@@ -10,3 +10,11 @@ C:\Users\linn\Documents\Visual Studio 2015\Projects\WindowsFormsApplication1\Win
 C:\Users\linn\Documents\Visual Studio 2015\Projects\FullscreenLock\FullscreenLock\bin\Release\FullscreenLock.exe.config
 C:\Users\linn\Documents\Visual Studio 2015\Projects\FullscreenLock\FullscreenLock\obj\Release\FullscreenLock.exe
 C:\Users\linn\Documents\Visual Studio 2015\Projects\FullscreenLock\FullscreenLock\obj\Release\FullscreenLock.pdb
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\bin\Release\FullscreenLock.exe.config
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\bin\Release\FullscreenLock.exe
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\bin\Release\FullscreenLock.pdb
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\obj\Release\FullscreenLock.FullscreenLock.resources
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\obj\Release\FullscreenLock.Properties.Resources.resources
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\obj\Release\FullscreenLock.csproj.GenerateResource.Cache
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\obj\Release\FullscreenLock.exe
+C:\Users\linn\Source\Repos\FullscreenLock\FullscreenLock\obj\Release\FullscreenLock.pdb
