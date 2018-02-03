@@ -3,7 +3,7 @@ Provide fullscreen mouse boundaries for games that don't.
 
 This is a program that locks the cursor to the primary monitor for games where the devs were too incompetent to do so themselves.
 
-In certain games, for example GTA V in windowed fullscreen, Skyrim and CS:GO, the mouse will not be locked to the primary monitor.
+In certain games, for example CS:GO, GTA V in windowed fullscreen and Skyrim, the mouse will not be locked to the primary monitor.
 This can cause a user to drag the cursor out of the program, click, suddenly minimize the game and have to switch back in.
 
 ## Why make this program?
