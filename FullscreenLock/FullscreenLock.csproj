@@ -53,7 +53,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checker.cs" />
-    <Compile Include="RECT.cs" />
     <Compile Include="FullscreenLock.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -1,111 +1,79 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using System.Windows;
 using System.Drawing;
 using System.Diagnostics;
+using System.ComponentModel;
 
 namespace FullscreenLock
 {
-    class Checker
+    class FullscreenChecker
     {
-        System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
+        public BackgroundWorker BackgroundWorker { get; set; } = new BackgroundWorker();
+
+        private IntPtr _desktopHandle;
+        private IntPtr _shellHandle;
 
         // Import a bunch of win32 API calls.
         [DllImport("user32.dll")]
         private static extern IntPtr GetForegroundWindow();
+
         [DllImport("user32.dll", SetLastError = true)]
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
         [DllImport("user32.dll", SetLastError = true)]
-        private static extern int GetWindowRect(IntPtr hwnd, out RECT rc);
-        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        public static extern bool ClipCursor(ref RECT rcClip);
+        private static extern int GetWindowRect(IntPtr hwnd, out Rect rc);
+
         [DllImport("user32.dll")]
         private static extern IntPtr GetDesktopWindow();
+
         [DllImport("user32.dll")]
         private static extern IntPtr GetShellWindow();
 
-        Label l; // One day I'll figure out how to set the label without sending a reference into the constructor.
-        public Checker(Label ll)
+        public FullscreenChecker()
         {
-            l = ll;
-            /* Adds the event and the event handler for the method that will 
-            process the timer event to the timer. */
-            t.Tick += new EventHandler(CheckForFullscreenApps);
+            // Get the pointers for the desktop and sell
+            _desktopHandle = GetDesktopWindow();
+            _shellHandle = GetShellWindow();
 
-            // Sets the timer interval to 5 seconds.
-            t.Interval = 100;
-            t.Start();
+            BackgroundWorker.DoWork += CheckFullscreenAndClipCursor;
+            // Make backgroundworker restart itself after it finished executing
+            BackgroundWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => { BackgroundWorker.RunWorkerAsync(); };
+
+            BackgroundWorker.RunWorkerAsync();
         }
 
-        public void toggle(Button b, Label l)
+        public void CheckFullscreenAndClipCursor(object sender, DoWorkEventArgs e)
         {
-            if(t.Enabled)
+            // Get the dimensions of the active window
+            IntPtr foregroundWindow = GetForegroundWindow();
+            
+            if (foregroundWindow != null && !foregroundWindow.Equals(IntPtr.Zero))
+            {
+                // Check we haven't picked up the desktop or the shell
+                if (!(foregroundWindow.Equals(_desktopHandle) || foregroundWindow.Equals(_shellHandle)))
                 {
-                t.Stop();
-                l.Text = "Paused";
-            }
-            else
-            {
-                t.Start();
-                l.Text = "Waiting for focus";
-            }
-        }
-        
-        private  void CheckForFullscreenApps(object sender, System.EventArgs e)
-        {
-        
-            if (IsForegroundFullScreen())
-            {
-                
-                l.Text = "Fullscreen app in focus";
-            }
-            else
-            {
-                l.Text = "Waiting for focus";
-                
-            }
-        }
+                    GetWindowRect(foregroundWindow, out Rect appBounds);
+                    // Determine if window is fullscreen
+                    Rectangle screenBounds = Screen.FromHandle(foregroundWindow).Bounds;
+                    GetWindowThreadProcessId(foregroundWindow, out uint procid);
+                    var process = Process.GetProcessById((int)procid);
 
-        public static bool IsForegroundFullScreen()
-        {
-            //Get the handles for the desktop and shell now.
-            IntPtr desktopHandle; 
-            IntPtr shellHandle; 
-            desktopHandle = GetDesktopWindow();
-            shellHandle = GetShellWindow();
-            RECT appBounds;
-            Rectangle screenBounds;
-            IntPtr hWnd;
-
-            //get the dimensions of the active window
-            hWnd = GetForegroundWindow();
-            if (hWnd != null && !hWnd.Equals(IntPtr.Zero))
-            {
-                //Check we haven't picked up the desktop or the shell
-                if (!(hWnd.Equals(desktopHandle) || hWnd.Equals(shellHandle)))
-                {
-                    GetWindowRect(hWnd, out appBounds);
-                    //determine if window is fullscreen
-                    screenBounds = Screen.FromHandle(hWnd).Bounds;
-                    uint procid = 0;
-                    GetWindowThreadProcessId(hWnd, out procid);
-                    var proc = Process.GetProcessById((int)procid);
                     if ((appBounds.Bottom - appBounds.Top) == screenBounds.Height && (appBounds.Right - appBounds.Left) == screenBounds.Width)
                     {
                         Cursor.Clip = screenBounds;
-                        return true;
+                        BackgroundWorker.ReportProgress(100, "Fullscreen app in focus");
                     }
                     else
                     {
                         Cursor.Clip = Rectangle.Empty;
-                        return false;
+                        BackgroundWorker.ReportProgress(100, "Waiting for focus");
                     }
-                }   
-             }
-             return false;
-         }
+                }
+            }
+            BackgroundWorker.ReportProgress(100, "Waiting for focus");
+        }
     }
 }
 
