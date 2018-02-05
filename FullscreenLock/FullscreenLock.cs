@@ -10,22 +10,33 @@ namespace FullscreenLock
         public FullscreenLock()
         {
             InitializeComponent();
+            StartFullscreenChecker();
         }
 
         private void ToggleButtonClicked(object sender, EventArgs e)
         {
             if (_fullscreenChecker == null)
             {
-                _fullscreenChecker = new FullscreenChecker();
-                _fullscreenChecker.BackgroundWorker.ProgressChanged += FullscreenCheckerProgressChanged;
+                StartFullscreenChecker();
             }
             else
             {
-                _fullscreenChecker.BackgroundWorker.ProgressChanged -= FullscreenCheckerProgressChanged;
-                _fullscreenChecker.Dispose();
-                _fullscreenChecker = null;
-                lblStatus.Text = "Paused";
+                StopFullscreenChecker();
             }
+        }
+
+        private void StartFullscreenChecker()
+        {
+            _fullscreenChecker = new FullscreenChecker();
+            _fullscreenChecker.BackgroundWorker.ProgressChanged += FullscreenCheckerProgressChanged;
+        }
+
+        private void StopFullscreenChecker()
+        {
+            _fullscreenChecker.BackgroundWorker.ProgressChanged -= FullscreenCheckerProgressChanged;
+            _fullscreenChecker.Dispose();
+            _fullscreenChecker = null;
+            lblStatus.Text = "Paused";
         }
 
         private void FullscreenCheckerProgressChanged(object sender, ProgressChangedEventArgs e)
