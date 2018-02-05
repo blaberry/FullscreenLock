@@ -64,10 +64,12 @@ namespace FullscreenLock
                 // Check we haven't picked up the desktop or the shell
                 if (!(foregroundWindow.Equals(_desktopHandle) || foregroundWindow.Equals(_shellHandle)))
                 {
-                    GetWindowRect(foregroundWindow, out Rect appBounds);
+                    Rect appBounds;
+                    GetWindowRect(foregroundWindow, out appBounds);
                     // Determine if window is fullscreen
                     Rectangle screenBounds = Screen.FromHandle(foregroundWindow).Bounds;
-                    GetWindowThreadProcessId(foregroundWindow, out uint procid);
+                    uint procid;
+                    GetWindowThreadProcessId(foregroundWindow, out procid);
                     var process = Process.GetProcessById((int)procid);
 
                     if ((appBounds.Bottom - appBounds.Top) == screenBounds.Height && (appBounds.Right - appBounds.Left) == screenBounds.Width)
