@@ -21,6 +21,8 @@ namespace FullscreenLock
             }
             else
             {
+                _fullscreenChecker.BackgroundWorker.ProgressChanged -= FullscreenCheckerProgressChanged;
+                _fullscreenChecker.Dispose();
                 _fullscreenChecker = null;
                 lblStatus.Text = "Paused";
             }

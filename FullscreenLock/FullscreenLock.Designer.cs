@@ -55,7 +55,7 @@ namespace FullscreenLock
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(230, 24);
             this.lblStatus.TabIndex = 1;
-            this.lblStatus.Text = "Waiting for focus";
+            this.lblStatus.Text = "Not Started";
             this.lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label4

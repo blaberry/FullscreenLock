@@ -8,12 +8,15 @@ using System.ComponentModel;
 
 namespace FullscreenLock
 {
-    class FullscreenChecker
+    class FullscreenChecker : IDisposable
     {
         public BackgroundWorker BackgroundWorker { get; set; } = new BackgroundWorker();
+        public string CurrentStatus { get; set; } = "Not Started";
 
         private IntPtr _desktopHandle;
         private IntPtr _shellHandle;
+
+        private RunWorkerCompletedEventHandler _completedHandler;
 
         // Import a bunch of win32 API calls.
         [DllImport("user32.dll")]
@@ -37,15 +40,22 @@ namespace FullscreenLock
             _desktopHandle = GetDesktopWindow();
             _shellHandle = GetShellWindow();
 
+            _completedHandler = (sender, e) => { BackgroundWorker.RunWorkerAsync(); };
+
+            BackgroundWorker.WorkerReportsProgress = true;
+            BackgroundWorker.WorkerSupportsCancellation = true;
+
             BackgroundWorker.DoWork += CheckFullscreenAndClipCursor;
             // Make backgroundworker restart itself after it finished executing
-            BackgroundWorker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => { BackgroundWorker.RunWorkerAsync(); };
+            BackgroundWorker.RunWorkerCompleted += _completedHandler;
 
             BackgroundWorker.RunWorkerAsync();
         }
 
         public void CheckFullscreenAndClipCursor(object sender, DoWorkEventArgs e)
         {
+            CurrentStatus = "Waiting for focus";
+
             // Get the dimensions of the active window
             IntPtr foregroundWindow = GetForegroundWindow();
             
@@ -63,16 +73,21 @@ namespace FullscreenLock
                     if ((appBounds.Bottom - appBounds.Top) == screenBounds.Height && (appBounds.Right - appBounds.Left) == screenBounds.Width)
                     {
                         Cursor.Clip = screenBounds;
-                        BackgroundWorker.ReportProgress(100, "Fullscreen app in focus");
+                        CurrentStatus = "Fullscreen app in focus";
                     }
                     else
                     {
                         Cursor.Clip = Rectangle.Empty;
-                        BackgroundWorker.ReportProgress(100, "Waiting for focus");
                     }
                 }
             }
-            BackgroundWorker.ReportProgress(100, "Waiting for focus");
+            BackgroundWorker.ReportProgress(100, CurrentStatus);
+        }
+
+        public void Dispose()
+        {
+            BackgroundWorker.RunWorkerCompleted -= _completedHandler;
+            BackgroundWorker.CancelAsync();
         }
     }
 }
