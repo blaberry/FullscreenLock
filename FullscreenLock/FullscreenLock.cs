@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FullscreenLock.UIControllers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,25 +12,24 @@ using System.Windows.Forms;
 
 namespace FullscreenLock
 {
-    public partial class FullscreenLock : Form
+    public partial class FullscreenLock : Form, UIControllers.IMainForm
     {
+        private MainformController Controller;
+
         public FullscreenLock()
         {
             InitializeComponent();
         }
-        private Checker c;
+
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.c = new Checker(label1);
+            Controller = new MainformController(this);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-           c.toggle(this.button1,this.label1);
-        }
-        public void labelset(string s)
-        {
-            this.label1.Text = s;
+            Controller.ToggleLock();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -41,6 +41,11 @@ namespace FullscreenLock
         {
 
 
+        }
+
+        public void SetInformation(string info)
+        {
+            label1.Text = info;
         }
     }
 }
