@@ -26,15 +26,11 @@ namespace FullscreenLock
         [DllImport("user32.dll")]
         private static extern IntPtr GetShellWindow();
 
-        Label l; // One day I'll figure out how to set the label without sending a reference into the constructor.
+        Label l; // One day I'll figure out how to set the label without sending a pointer into the constructor.
         public Checker(Label ll)
         {
             l = ll;
-            /* Adds the event and the event handler for the method that will 
-            process the timer event to the timer. */
             t.Tick += new EventHandler(CheckForFullscreenApps);
-
-            // Sets the timer interval to 5 seconds.
             t.Interval = 100;
             t.Start();
         }
@@ -42,7 +38,7 @@ namespace FullscreenLock
         public void toggle(Button b, Label l)
         {
             if(t.Enabled)
-                {
+            {
                 t.Stop();
                 l.Text = "Paused";
             }
@@ -53,7 +49,7 @@ namespace FullscreenLock
             }
         }
         
-        private  void CheckForFullscreenApps(object sender, System.EventArgs e)
+        private void CheckForFullscreenApps(object sender, System.EventArgs e)
         {
         
             if (IsForegroundFullScreen())
@@ -79,7 +75,6 @@ namespace FullscreenLock
             Rectangle screenBounds;
             IntPtr hWnd;
 
-            //get the dimensions of the active window
             hWnd = GetForegroundWindow();
             if (hWnd != null && !hWnd.Equals(IntPtr.Zero))
             {
@@ -94,6 +89,7 @@ namespace FullscreenLock
                     var proc = Process.GetProcessById((int)procid);
                     if ((appBounds.Bottom - appBounds.Top) == screenBounds.Height && (appBounds.Right - appBounds.Left) == screenBounds.Width)
                     {
+                        Console.WriteLine(proc.ProcessName);
                         Cursor.Clip = screenBounds;
                         return true;
                     }
