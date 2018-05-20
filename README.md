@@ -15,6 +15,11 @@ This also lets you keep the application open while no game is running, so that y
 
 All this is made possible by watching what window is focused. Any window both fullscreen and in focus will trigger the primary monitor lock.
 
+# Installation
+
+It's been made apparent from comments from some very nice people that it's not obvious from the README how to install the application. There's a green bar above, click the tab "Releases" and you'll be taken to the newest release available. Click download, put the .exe in an appropriate place, and run.
+
+
 # Demo
 
 Here's a demonstration of mouse movement when:
