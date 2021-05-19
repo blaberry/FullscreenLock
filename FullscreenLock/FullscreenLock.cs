@@ -13,34 +13,51 @@ namespace FullscreenLock
 {
     public partial class FullscreenLock : Form
     {
+        private Checker c;
+
         public FullscreenLock()
         {
             InitializeComponent();
         }
-        private Checker c;
-        private void Form1_Load(object sender, EventArgs e)
+
+        private void FullscreenLock_Load(object sender, EventArgs e)
         {
-            this.c = new Checker(label1);
+            c = new Checker(label1);
+        }
+
+        private void FullscreenLock_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
+                setVisibility(false);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-           c.toggle(this.button1,this.label1);
-        }
-        public void labelset(string s)
-        {
-            this.label1.Text = s;
+            c.toggle(button1, label1);
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Close();
         }
 
-        private void label4_Click(object sender, EventArgs e)
+        private void showToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            setVisibility(true);
+        }
 
+        private void notifyIcon1_Click(object sender, EventArgs e)
+        {
+            setVisibility(true);
+        }
 
+        private void setVisibility(bool state)
+        {
+            Visible = state;
+
+            if (state) WindowState = FormWindowState.Normal;
+
+            notifyIcon1.Visible = !state;
         }
     }
 }
