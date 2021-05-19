@@ -36,9 +36,10 @@ namespace FullscreenLock
             c.toggle(button1, label1);
         }
 
-        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
         {
-            Close();
+            if (e.Button == MouseButtons.Left)
+                setVisibility(true);
         }
 
         private void showToolStripMenuItem_Click(object sender, EventArgs e)
@@ -46,18 +47,18 @@ namespace FullscreenLock
             setVisibility(true);
         }
 
-        private void notifyIcon1_Click(object sender, EventArgs e)
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            setVisibility(true);
+            Close();
         }
 
         private void setVisibility(bool state)
         {
             Visible = state;
-
-            if (state) WindowState = FormWindowState.Normal;
-
             notifyIcon1.Visible = !state;
+
+            if (state)
+                WindowState = FormWindowState.Normal;
         }
     }
 }
