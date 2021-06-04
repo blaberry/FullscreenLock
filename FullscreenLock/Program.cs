@@ -16,7 +16,7 @@ namespace FullscreenLock
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FullscreenLock());
+            Application.Run(new FullscreenLockContext());
         }
     }
 }

@@ -1,64 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FullscreenLock
 {
     public partial class FullscreenLock : Form
     {
-        private Checker c;
+        public event EventHandler ActiveStateToggled;
 
         public FullscreenLock()
         {
             InitializeComponent();
         }
 
-        private void FullscreenLock_Load(object sender, EventArgs e)
+        private void FullscreenLock_FormClosed(object sender, FormClosedEventArgs e)
         {
-            c = new Checker(label1);
+            Application.Exit();
         }
 
         private void FullscreenLock_Resize(object sender, EventArgs e)
         {
             if (WindowState == FormWindowState.Minimized)
-                setVisibility(false);
+                SetVisibility(false);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ToggleButton_Click(object sender, EventArgs e)
         {
-            c.toggle(button1, label1);
+            ActiveStateToggled?.Invoke(this, e);
         }
 
-        private void notifyIcon1_MouseClick(object sender, MouseEventArgs e)
+        public void SetVisibility(bool state)
         {
-            if (e.Button == MouseButtons.Left)
-                setVisibility(true);
-        }
+            // Always setting to minimized ensures that the window gets focus when visibility is set to true
+            WindowState = FormWindowState.Minimized;
 
-        private void showToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            setVisibility(true);
-        }
-
-        private void quitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void setVisibility(bool state)
-        {
             Visible = state;
-            notifyIcon1.Visible = !state;
 
             if (state)
                 WindowState = FormWindowState.Normal;
+        }
+
+        public void ActiveStateChanged(object sender, BoolEventArgs e)
+        {
+            StatusLabel.Text = e.Bool ? "Waiting for focus" : "Paused";
+        }
+
+        public void ForegroundFullscreenStateChanged(object sender, BoolEventArgs e)
+        {
+            StatusLabel.Text = e.Bool ? "Fullscreen app in focus" : "Waiting for focus";
         }
     }
 }

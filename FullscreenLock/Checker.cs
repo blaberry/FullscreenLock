@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
-using System.Windows;
 using System.Drawing;
 using System.Diagnostics;
 
@@ -10,7 +8,10 @@ namespace FullscreenLock
 {
     class Checker
     {
-        System.Windows.Forms.Timer t = new System.Windows.Forms.Timer();
+        readonly Timer t = new Timer();
+        bool ForegroundFullscreenState = false;
+        public event EventHandler<BoolEventArgs> ActiveStateChanged;
+        public event EventHandler<BoolEventArgs> ForegroundFullscreenStateChanged;
 
         // Import a bunch of win32 API calls.
         [DllImport("user32.dll")]
@@ -26,52 +27,44 @@ namespace FullscreenLock
         [DllImport("user32.dll")]
         private static extern IntPtr GetShellWindow();
 
-        Label l; // One day I'll figure out how to set the label without sending a pointer into the constructor.
-        public Checker(Label ll)
+        public Checker()
         {
-            l = ll;
             t.Tick += new EventHandler(CheckForFullscreenApps);
             t.Interval = 100;
             t.Start();
         }
 
-        public void toggle(Button b, Label l)
+        public void ActiveStateToggled(object sender, EventArgs e)
         {
-            if(t.Enabled)
+            if (t.Enabled)
             {
                 t.Stop();
-                l.Text = "Paused";
             }
             else
             {
                 t.Start();
-                l.Text = "Waiting for focus";
             }
+
+            ActiveStateChanged?.Invoke(this, new BoolEventArgs(t.Enabled));
         }
-        
-        private void CheckForFullscreenApps(object sender, System.EventArgs e)
+
+        private void CheckForFullscreenApps(object sender, EventArgs e)
         {
-        
-            if (IsForegroundFullScreen())
+            bool NewFullscreenState = IsForegroundFullScreen();
+
+            //If the fullscreen state changed, set the new state and emit the change event
+            if (ForegroundFullscreenState != NewFullscreenState)
             {
-                
-                l.Text = "Fullscreen app in focus";
-            }
-            else
-            {
-                l.Text = "Waiting for focus";
-                
+                ForegroundFullscreenState = NewFullscreenState;
+                ForegroundFullscreenStateChanged?.Invoke(this, new BoolEventArgs(NewFullscreenState));
             }
         }
 
         public static bool IsForegroundFullScreen()
         {
             //Get the handles for the desktop and shell now.
-            IntPtr desktopHandle; 
-            IntPtr shellHandle; 
-            desktopHandle = GetDesktopWindow();
-            shellHandle = GetShellWindow();
-            RECT appBounds;
+            IntPtr desktopHandle = GetDesktopWindow();
+            IntPtr shellHandle = GetShellWindow();
             Rectangle screenBounds;
             IntPtr hWnd;
 
@@ -81,11 +74,10 @@ namespace FullscreenLock
                 //Check we haven't picked up the desktop or the shell
                 if (!(hWnd.Equals(desktopHandle) || hWnd.Equals(shellHandle)))
                 {
-                    GetWindowRect(hWnd, out appBounds);
+                    GetWindowRect(hWnd, out RECT appBounds);
                     //determine if window is fullscreen
                     screenBounds = Screen.FromHandle(hWnd).Bounds;
-                    uint procid = 0;
-                    GetWindowThreadProcessId(hWnd, out procid);
+                    GetWindowThreadProcessId(hWnd, out uint procid);
                     var proc = Process.GetProcessById((int)procid);
                     if ((appBounds.Bottom - appBounds.Top) == screenBounds.Height && (appBounds.Right - appBounds.Left) == screenBounds.Width)
                     {
@@ -98,10 +90,19 @@ namespace FullscreenLock
                         Cursor.Clip = Rectangle.Empty;
                         return false;
                     }
-                }   
-             }
-             return false;
-         }
+                }
+            }
+            return false;
+        }
+    }
+
+    public class BoolEventArgs : EventArgs
+    {
+        public bool Bool { get; set; }
+
+        public BoolEventArgs(bool b)
+        {
+            Bool = b;
+        }
     }
 }
-
