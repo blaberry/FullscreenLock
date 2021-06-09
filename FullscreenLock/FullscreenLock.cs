@@ -1,46 +1,52 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FullscreenLock
 {
     public partial class FullscreenLock : Form
     {
+        public event EventHandler ActiveStateToggled;
+
         public FullscreenLock()
         {
             InitializeComponent();
         }
-        private Checker c;
-        private void Form1_Load(object sender, EventArgs e)
+
+        private void FullscreenLock_FormClosed(object sender, FormClosedEventArgs e)
         {
-            this.c = new Checker(label1);
+            Application.Exit();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void FullscreenLock_Resize(object sender, EventArgs e)
         {
-           c.toggle(this.button1,this.label1);
-        }
-        public void labelset(string s)
-        {
-            this.label1.Text = s;
+            if (WindowState == FormWindowState.Minimized)
+                SetVisibility(false);
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void ToggleButton_Click(object sender, EventArgs e)
         {
-
+            ActiveStateToggled?.Invoke(this, e);
         }
 
-        private void label4_Click(object sender, EventArgs e)
+        public void SetVisibility(bool state)
         {
+            // Always setting to minimized ensures that the window gets focus when visibility is set to true
+            WindowState = FormWindowState.Minimized;
 
+            Visible = state;
 
+            if (state)
+                WindowState = FormWindowState.Normal;
+        }
+
+        public void ActiveStateChanged(object sender, BoolEventArgs e)
+        {
+            StatusLabel.Text = e.Bool ? "Waiting for focus" : "Paused";
+        }
+
+        public void ForegroundFullscreenStateChanged(object sender, BoolEventArgs e)
+        {
+            StatusLabel.Text = e.Bool ? "Fullscreen app in focus" : "Waiting for focus";
         }
     }
 }

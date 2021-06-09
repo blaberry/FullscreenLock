@@ -1,9 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31313.79
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FullscreenLock", "FullscreenLock\FullscreenLock.csproj", "{7A92E5B0-CFAF-4182-B4EE-48C5F0E66CB8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3FF0CE06-8D0E-45CA-B1E7-FA5E35766E7F}"
+	ProjectSection(SolutionItems) = preProject
+		FullscreenLockContext.Designer.cs = FullscreenLockContext.Designer.cs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +23,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {485A395A-2746-4CDA-8973-9CDEAAC121FD}
 	EndGlobalSection
 EndGlobal

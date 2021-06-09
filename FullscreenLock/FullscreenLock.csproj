@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checker.cs" />
+    <Compile Include="FullscreenLockContext.cs" />
     <Compile Include="RECT.cs" />
     <Compile Include="FullscreenLock.cs">
       <SubType>Form</SubType>
@@ -106,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="gaben.ico" />
+    <None Include="Resources\TrayIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
