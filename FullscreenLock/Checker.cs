@@ -1,67 +1,41 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Drawing;
-using System.Diagnostics;
 
-namespace FullscreenLock
-{
-    class Checker
-    {
-        readonly Timer t = new Timer();
-        bool ForegroundFullscreenState = false;
-        public event EventHandler<BoolEventArgs> ActiveStateChanged;
-        public event EventHandler<BoolEventArgs> ForegroundFullscreenStateChanged;
+namespace FullscreenLock {
 
-        // Import a bunch of win32 API calls.
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-        [DllImport("user32.dll", SetLastError = true)]
-        private static extern int GetWindowRect(IntPtr hwnd, out RECT rc);
-        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
-        public static extern bool ClipCursor(ref RECT rcClip);
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetDesktopWindow();
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetShellWindow();
+    public class BoolEventArgs : EventArgs {
 
-        public Checker()
-        {
+        public BoolEventArgs(bool b) {
+            Bool = b;
+        }
+
+        public bool Bool { get; set; }
+    }
+
+    internal class Checker {
+        private readonly Timer t = new Timer();
+        private bool ForegroundFullscreenState = false;
+
+        public Checker() {
             t.Tick += new EventHandler(CheckForFullscreenApps);
             t.Interval = 100;
             t.Start();
         }
 
-        public void ActiveStateToggled(object sender, EventArgs e)
-        {
-            if (t.Enabled)
-            {
-                t.Stop();
-            }
-            else
-            {
-                t.Start();
-            }
+        public event EventHandler<BoolEventArgs> ActiveStateChanged;
 
-            ActiveStateChanged?.Invoke(this, new BoolEventArgs(t.Enabled));
-        }
+        public event EventHandler<BoolEventArgs> ForegroundFullscreenStateChanged;
 
-        private void CheckForFullscreenApps(object sender, EventArgs e)
-        {
-            bool NewFullscreenState = IsForegroundFullScreen();
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        public static extern bool ClipCursor(ref RECT rcClip);
 
-            //If the fullscreen state changed, set the new state and emit the change event
-            if (ForegroundFullscreenState != NewFullscreenState)
-            {
-                ForegroundFullscreenState = NewFullscreenState;
-                ForegroundFullscreenStateChanged?.Invoke(this, new BoolEventArgs(NewFullscreenState));
-            }
-        }
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
-        public static bool IsForegroundFullScreen()
-        {
+        public static bool IsForegroundFullScreen() {
             //Get the handles for the desktop and shell now.
             IntPtr desktopHandle = GetDesktopWindow();
             IntPtr shellHandle = GetShellWindow();
@@ -69,24 +43,21 @@ namespace FullscreenLock
             IntPtr hWnd;
 
             hWnd = GetForegroundWindow();
-            if (hWnd != null && !hWnd.Equals(IntPtr.Zero))
-            {
+            if (hWnd != null && !hWnd.Equals(IntPtr.Zero)) {
                 //Check we haven't picked up the desktop or the shell
-                if (!(hWnd.Equals(desktopHandle) || hWnd.Equals(shellHandle)))
-                {
+                if (!(hWnd.Equals(desktopHandle) || hWnd.Equals(shellHandle))) {
                     GetWindowRect(hWnd, out RECT appBounds);
                     //determine if window is fullscreen
                     screenBounds = Screen.FromHandle(hWnd).Bounds;
                     GetWindowThreadProcessId(hWnd, out uint procid);
                     var proc = Process.GetProcessById((int)procid);
-                    if ((appBounds.Bottom - appBounds.Top) == screenBounds.Height && (appBounds.Right - appBounds.Left) == screenBounds.Width)
-                    {
+                    var screenHeight = (appBounds.Bottom - appBounds.Top);
+                    var screenWidth = (appBounds.Right - appBounds.Left);
+                    if (screenHeight >= screenBounds.Height && screenWidth >= screenBounds.Width) {
                         Console.WriteLine(proc.ProcessName);
                         Cursor.Clip = screenBounds;
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         Cursor.Clip = Rectangle.Empty;
                         return false;
                     }
@@ -94,15 +65,38 @@ namespace FullscreenLock
             }
             return false;
         }
-    }
 
-    public class BoolEventArgs : EventArgs
-    {
-        public bool Bool { get; set; }
+        public void ActiveStateToggled(object sender, EventArgs e) {
+            if (t.Enabled) {
+                t.Stop();
+            } else {
+                t.Start();
+            }
 
-        public BoolEventArgs(bool b)
-        {
-            Bool = b;
+            ActiveStateChanged?.Invoke(this, new BoolEventArgs(t.Enabled));
+        }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetDesktopWindow();
+
+        // Import a bunch of win32 API calls.
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetShellWindow();
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern int GetWindowRect(IntPtr hwnd, out RECT rc);
+
+        private void CheckForFullscreenApps(object sender, EventArgs e) {
+            bool NewFullscreenState = IsForegroundFullScreen();
+
+            //If the fullscreen state changed, set the new state and emit the change event
+            if (ForegroundFullscreenState != NewFullscreenState) {
+                ForegroundFullscreenState = NewFullscreenState;
+                ForegroundFullscreenStateChanged?.Invoke(this, new BoolEventArgs(NewFullscreenState));
+            }
         }
     }
 }
