@@ -2,20 +2,17 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace FullscreenLock
-{
-    class FullscreenLockContext : ApplicationContext
-    {
-        private NotifyIcon TrayIcon;
-        private ContextMenuStrip TrayIconContextMenu;
+namespace FullscreenLock {
+
+    internal class FullscreenLockContext : ApplicationContext {
+        private readonly Checker c;
+        private readonly FullscreenLock fsl;
         private ToolStripMenuItem QuitMenuItem;
         private ToolStripMenuItem ShowMenuItem;
+        private NotifyIcon TrayIcon;
+        private ContextMenuStrip TrayIconContextMenu;
 
-        private readonly FullscreenLock fsl;
-        private readonly Checker c;
-
-        public FullscreenLockContext()
-        {
+        public FullscreenLockContext() {
             Application.ApplicationExit += new EventHandler(OnApplicationExit);
 
             InitializeComponent();
@@ -29,8 +26,7 @@ namespace FullscreenLock
             TrayIcon.Visible = true;
         }
 
-        private void InitializeComponent()
-        {
+        private void InitializeComponent() {
             TrayIcon = new NotifyIcon();
             TrayIconContextMenu = new ContextMenuStrip();
             ShowMenuItem = new ToolStripMenuItem();
@@ -63,25 +59,21 @@ namespace FullscreenLock
             TrayIconContextMenu.ResumeLayout(false);
         }
 
-        private void OnApplicationExit(object sender, EventArgs e)
-        {
+        private void OnApplicationExit(object sender, EventArgs e) {
             TrayIcon.Visible = false;
         }
 
-        private void TrayIcon_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-                fsl.SetVisibility(true);
+        private void QuitMenuItem_Click(object sender, EventArgs e) {
+            Application.Exit();
         }
 
-        private void ShowMenuItem_Click(object sender, EventArgs e)
-        {
+        private void ShowMenuItem_Click(object sender, EventArgs e) {
             fsl.SetVisibility(true);
         }
 
-        private void QuitMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
+        private void TrayIcon_MouseClick(object sender, MouseEventArgs e) {
+            if (e.Button == MouseButtons.Left)
+                fsl.SetVisibility(true);
         }
     }
 }
