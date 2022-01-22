@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Drawing;
@@ -79,7 +80,8 @@ namespace FullscreenLock
                     screenBounds = Screen.FromHandle(hWnd).Bounds;
                     GetWindowThreadProcessId(hWnd, out uint procid);
                     var proc = Process.GetProcessById((int)procid);
-                    if ((appBounds.Bottom - appBounds.Top) == screenBounds.Height && (appBounds.Right - appBounds.Left) == screenBounds.Width)
+                    if ((appBounds.Bottom - appBounds.Top) == screenBounds.Height && (appBounds.Right - appBounds.Left) == screenBounds.Width
+                        && !IsWhitelisted(proc.MainModule.FileName))
                     {
                         Console.WriteLine(proc.ProcessName);
                         Cursor.Clip = screenBounds;
@@ -93,6 +95,11 @@ namespace FullscreenLock
                 }
             }
             return false;
+        }
+
+        public static bool IsWhitelisted(string sFullPathToProgram)
+        {
+            return Program.Settings_File.Instance.asWhitelist.ConvertAll(s => s.ToLower()).Contains(sFullPathToProgram.ToLower());
         }
     }
 

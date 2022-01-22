@@ -34,6 +34,7 @@ namespace FullscreenLock
             this.ToggleButton = new System.Windows.Forms.Button();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.MadeByLabel = new System.Windows.Forms.Label();
+            this.buttonSettings = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ToggleButton
@@ -69,6 +70,18 @@ namespace FullscreenLock
             this.MadeByLabel.Text = "✨ Made by Blåberry and the community ✨";
             this.MadeByLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // buttonSettings
+            // 
+            this.buttonSettings.Cursor = System.Windows.Forms.Cursors.Default;
+            this.buttonSettings.Font = new System.Drawing.Font("Segoe MDL2 Assets", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSettings.Location = new System.Drawing.Point(186, 12);
+            this.buttonSettings.Name = "buttonSettings";
+            this.buttonSettings.Size = new System.Drawing.Size(30, 30);
+            this.buttonSettings.TabIndex = 3;
+            this.buttonSettings.Text = "";
+            this.buttonSettings.UseVisualStyleBackColor = true;
+            this.buttonSettings.Click += new System.EventHandler(this.buttonSettings_Click);
+            // 
             // FullscreenLock
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 13F);
@@ -76,6 +89,7 @@ namespace FullscreenLock
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(229, 141);
+            this.Controls.Add(this.buttonSettings);
             this.Controls.Add(this.ToggleButton);
             this.Controls.Add(this.MadeByLabel);
             this.Controls.Add(this.StatusLabel);
@@ -100,5 +114,6 @@ namespace FullscreenLock
         private System.Windows.Forms.Button ToggleButton;
         public System.Windows.Forms.Label StatusLabel;
         private System.Windows.Forms.Label MadeByLabel;
+        private Button buttonSettings;
     }
 }
