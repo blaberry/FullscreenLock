@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Drawing;
@@ -77,22 +78,39 @@ namespace FullscreenLock
                     GetWindowRect(hWnd, out RECT appBounds);
                     //determine if window is fullscreen
                     screenBounds = Screen.FromHandle(hWnd).Bounds;
-                    GetWindowThreadProcessId(hWnd, out uint procid);
-                    var proc = Process.GetProcessById((int)procid);
-                    if ((appBounds.Bottom - appBounds.Top) == screenBounds.Height && (appBounds.Right - appBounds.Left) == screenBounds.Width)
+
+                    //determine process, to check the whitelist
+                    Process proc = null;
+                    try
                     {
-                        Console.WriteLine(proc.ProcessName);
-                        Cursor.Clip = screenBounds;
-                        return true;
+                        GetWindowThreadProcessId(hWnd, out uint procid);
+                        proc = Process.GetProcessById((int)procid);
                     }
-                    else
+                    catch (Exception) { }
+
+                    if (proc != null)
                     {
-                        Cursor.Clip = Rectangle.Empty;
-                        return false;
+                        if ((appBounds.Bottom - appBounds.Top) == screenBounds.Height && (appBounds.Right - appBounds.Left) == screenBounds.Width
+                            && !IsWhitelisted(proc.MainModule.FileName))
+                        {
+                            Console.WriteLine(proc.ProcessName);
+                            Cursor.Clip = screenBounds;
+                            return true;
+                        }
+                        else
+                        {
+                            Cursor.Clip = Rectangle.Empty;
+                            return false;
+                        }
                     }
                 }
             }
             return false;
+        }
+
+        public static bool IsWhitelisted(string sFullPathToProgram)
+        {
+            return Program.Settings_File.Instance.asWhitelist.ConvertAll(s => s.ToLower()).Contains(sFullPathToProgram.ToLower());
         }
     }
 

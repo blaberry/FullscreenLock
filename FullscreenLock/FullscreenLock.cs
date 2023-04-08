@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Windows.Forms;
+using static FullscreenLock.Settings;
 
 namespace FullscreenLock
 {
     public partial class FullscreenLock : Form
     {
         public event EventHandler ActiveStateToggled;
+
 
         public FullscreenLock()
         {
@@ -47,6 +49,12 @@ namespace FullscreenLock
         public void ForegroundFullscreenStateChanged(object sender, BoolEventArgs e)
         {
             StatusLabel.Text = e.Bool ? "Fullscreen app in focus" : "Waiting for focus";
+        }
+
+        private void buttonSettings_Click(object sender, EventArgs e)
+        {
+            Settings settings = new Settings(this);
+            settings.Show();
         }
     }
 }
